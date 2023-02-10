@@ -1,0 +1,28 @@
+{
+  "name": "nodejs-playground",
+  "version": "1.0.0",
+  "description": "building a backend but i'm not exactly sure what for right now",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/robpan38/nodejs-playground.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/robpan38/nodejs-playground/issues"
+  },
+  "homepage": "https://github.com/robpan38/nodejs-playground#readme",
+  "dependencies": {
+    "date-fns": "^2.29.3",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}

@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start-node-server": "node node-server.js",
-    "dev-node-server": "nodemon node-server.js"
+    "start-express-server": "node express-server.js",
+    "dev-node-server": "nodemon node-server.js",
+    "dev-express-server": "nodemon express-server.js"
   },
   "repository": {
     "type": "git",
@@ -20,6 +22,7 @@
   "homepage": "https://github.com/robpan38/nodejs-playground#readme",
   "dependencies": {
     "date-fns": "^2.29.3",
+    "express": "^4.18.2",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

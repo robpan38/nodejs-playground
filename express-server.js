@@ -9,7 +9,12 @@ const app = express();
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/', express.static(path.join(__dirname, 'public')));
+app.use('/subdir', express.static(path.join(__dirname, 'public')));
+app.use('/subdir', require("./routes/subdir"));
+app.use('/api/employees', require("./routes/api/employees"));
+app.use('/', require("./routes/root"));
 
 app.use(logger);
 
@@ -25,42 +30,6 @@ const corsOptions = {
     optionsSucccessStatus: 200,
 };
 app.use(cors(corsOptions));
-
-app.get('^/$|/index(.html)?', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'index.html'));
-})
-
-app.get('/new-page(.html)?', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'new-page.html'));
-})
-
-app.get('/old-page(.html)?', (req, res) => {
-    res.redirect(301, '/new-page.html');
-})
-
-app.get('/hello(.html)?', (req, res, next) => {
-    next();
-}, (req, res) => {
-    res.send('Hello world!');
-})
-
-// array of handlers
-const handler1 = (req, res, next) => {
-    console.log('hello from handler 1');
-    next();
-}
-
-const handler2 = (req, res, next) => {
-    console.log('hello from handler 2');
-    next();
-}
-
-const handler3 = (req, res) => {
-    console.log('hello from handler 3');
-    res.send('Chain of handlers!');
-}
-
-app.get('/chain(.html)?', [handler1, handler2, handler3]);
 
 app.all('*', (req, res) => {
     if (req.accepts("html")) {

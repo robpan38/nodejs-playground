@@ -14,6 +14,8 @@ app.use('/', express.static(path.join(__dirname, 'public')));
 app.use('/subdir', express.static(path.join(__dirname, 'public')));
 app.use('/subdir', require("./routes/subdir"));
 app.use('/api/employees', require("./routes/api/employees"));
+app.use('/register', require("./routes/register"));
+app.use('/login', require("./routes/login"));
 app.use('/', require("./routes/root"));
 
 app.use(logger);

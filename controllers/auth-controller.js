@@ -39,7 +39,10 @@ const handleLogin = async (req, res) => {
         );
 
         // save refreshToken
-        userDB.setUsers([...userDB.users, {...user, refreshToken}]);
+        userDB.setUsers(
+            [...userDB.users.filter(person => person.username !== user.username),
+            {...user, refreshToken}]
+        );
         await fsPromises.writeFile(
             path.join(__dirname, "..", "model", "users.json"),
             JSON.stringify(userDB.users)

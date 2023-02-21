@@ -15,6 +15,7 @@ const verifyJWT = (req, res, next) => {
             if (err) return res.status(403).json({ "message": "auth token is invalid!" });
 
             req.user = decoded.username;
+            req.roles = decoded.roles;
             next();
         }
     )

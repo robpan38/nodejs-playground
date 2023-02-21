@@ -21,7 +21,11 @@ const handleRegister = async (req, res) => {
 
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
-        const user = { username: username, password: hashedPassword };
+        const user = {
+            username: username,
+            roles: { "User": 1 },
+            password: hashedPassword
+        };
         userDB.setUsers([...userDB.users, user]);
         await fsPromises.writeFile(
             path.join(__dirname, "..", "model", "users.json"),

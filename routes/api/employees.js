@@ -3,14 +3,16 @@ const express = require("express");
 const path = require("path");
 const router = express.Router();
 const employeeController = require("../../controllers/employee-controller");
+const ROLES_LIST = require("../../config/roles-list");
+const verifyRoles = require("../../middleware/verifyRoles");
 
 router.route('/')
     .get(employeeController.getEmployees)
-    .post(employeeController.addEmployee)
+    .post(verifyRoles(ROLES_LIST.Editor, ROLES_LIST.Admin), employeeController.addEmployee)
 
 router.route('/:id')
     .get(employeeController.getEmployee)
-    .put(employeeController.editEmployee)
-    .delete(employeeController.deleteEmployee)
+    .put(verifyRoles(ROLES_LIST.Editor, ROLES_LIST.Admin), employeeController.editEmployee)
+    .delete(verifyRoles(ROLES_LIST.Admin), employeeController.deleteEmployee)
 
 module.exports = router;

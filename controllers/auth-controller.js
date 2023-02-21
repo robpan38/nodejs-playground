@@ -26,9 +26,13 @@ const handleLogin = async (req, res) => {
         if (!match) {
             return res.status(401).json({ "message": "Incorrect password!" });
         }
-
+        
+        const roles = Object.values(user.roles);
         const accessToken = jwt.sign(
-            { "username": user.username },
+            {
+                "username": user.username,
+                "roles": roles
+            },
             process.env.ACCESS_TOKEN_SECRET,
             { "expiresIn": "30s" }
         );

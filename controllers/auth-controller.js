@@ -4,6 +4,11 @@ const userDB = {
     setUsers: function(users) { this.users = users; }
 }
 
+require("dotenv").config();
+const jwt = require("jsonwebtoken");
+const fsPromises = require("fs").promises;
+const path = require("path");
+
 const handleLogin = async (req, res) => {
     const { username, password } = req.body;
 
@@ -22,8 +27,27 @@ const handleLogin = async (req, res) => {
             return res.status(401).json({ "message": "Incorrect password!" });
         }
 
-        // create JWT tokens
-        return res.status(200).json({ "message": "Successfully logged in!" });
+        const accessToken = jwt.sign(
+            { "username": user.username },
+            process.env.ACCESS_TOKEN_SECRET,
+            { "expiresIn": "30s" }
+        );
+        const refreshToken = jwt.sign(
+            { "username": user.username },
+            process.env.REFRESH_TOKEN_SECRET,
+            { "expiresIn": "1d" }
+        );
+
+        // save refreshToken
+        userDB.setUsers([...userDB.users, {...user, refreshToken}]);
+        await fsPromises.writeFile(
+            path.join(__dirname, "..", "model", "users.json"),
+            JSON.stringify(userDB.users)
+        )
+
+        // send access token as json & refresh token as http only cookie
+        res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
+        return res.status(200).json({ accessToken });
     } catch (err) {
         return res.status(500).json({ "message": "Server error while logging in!" });
     }

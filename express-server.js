@@ -2,21 +2,28 @@ const path = require("path");
 const PORT = process.env.PORT | 3500;
 const { logger } = require("./middleware/logEvents");
 const errorHandler = require("./middleware/errorHandler");
+const verifyJWT = require("./middleware/verifyJWT");
 
 const express = require("express");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 const app = express();
 
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 app.use(express.json());
 
 app.use('/', express.static(path.join(__dirname, 'public')));
 app.use('/subdir', express.static(path.join(__dirname, 'public')));
 app.use('/subdir', require("./routes/subdir"));
-app.use('/api/employees', require("./routes/api/employees"));
+app.use('/', require("./routes/root"));
 app.use('/register', require("./routes/register"));
 app.use('/login', require("./routes/login"));
-app.use('/', require("./routes/root"));
+app.use('/refresh', require("./routes/refresh"));
+app.use('/logout', require("./routes/logout"));
+
+app.use(verifyJWT);
+app.use('/api/employees', require("./routes/api/employees"));
 
 app.use(logger);
 
